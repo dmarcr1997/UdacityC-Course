@@ -11,6 +11,15 @@ using std::vector;
 
 enum class State {kEmpty, kObstacle};
 
+vector<vector<State>> Search(vector<vector<State>> grid, int start[2], int goal[2]) {
+    cout << "No path found!\n";
+    return vector<vector<State>> {}; 
+}
+
+int Heuristic(int x1, int x2, int y1, int y2){
+    return abs(x2 - x1) + abs(y2 - y1);
+}
+
 vector<State> ParseLine(string line) {
     istringstream sline(line);
     int n;
