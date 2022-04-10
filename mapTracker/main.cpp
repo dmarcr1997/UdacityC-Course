@@ -9,7 +9,12 @@ using std::istringstream;
 using std::string;
 using std::vector;
 
-enum class State {kEmpty, kObstacle};
+enum class State {kEmpty, kObstacle, kClosed};
+
+void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &open, vector<vector<State>> &grid) {
+  	open.push_back(vector<int> {x, y, g, h});
+  	grid[x][y] = State::kClosed;
+}
 
 vector<vector<State>> Search(vector<vector<State>> grid, int start[2], int goal[2]) {
     cout << "No path found!\n";
