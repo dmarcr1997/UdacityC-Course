@@ -17,13 +17,32 @@ enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
 
-void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &open, vector<vector<State>> &grid) {
-  	open.push_back(vector<int> {x, y, g, h});
-  	grid[x][y] = State::kClosed;
+vector<State> ParseLine(string line) {
+    istringstream sline(line);
+    int n;
+    char c;
+   
+    vector<State> row;
+    while (sline >> n >> c && c == ',') {
+     
+      row.push_back(n == 0 ? State::kEmpty : State::kObstacle);
+    }
+    return row;
 }
 
-int Heuristic(int x1, int x2, int y1, int y2){
-    return abs(x2 - x1) + abs(y2 - y1);
+vector<vector<State>> ReadBoardFile(string path) {
+  ifstream myfile (path);
+ 
+  vector<vector<State>> board{};
+  if (myfile) {
+    string line;
+    while (getline(myfile, line)) {
+      
+      vector<State> row = ParseLine(line);
+      board.push_back(row);
+    }
+  }
+  return board;
 }
 
 bool Compare(vector<int> node1, vector<int> node2){
@@ -36,6 +55,10 @@ void CellSort(vector<vector<int>> *v) {
   sort(v->begin(), v->end(), Compare);
 }
 
+int Heuristic(int x1, int x2, int y1, int y2){
+    return abs(x2 - x1) + abs(y2 - y1);
+}
+
 bool CheckValidCell(int x, int y, vector<vector<State>> &grid){
   bool valid_x = (x >= 0 && x < grid.size());
   bool valid_y = (y >= 0 && y < grid[0].size());
@@ -43,6 +66,11 @@ bool CheckValidCell(int x, int y, vector<vector<State>> &grid){
     return grid[x][y] == State::kEmpty;
   }
   return false;
+}
+
+void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &open, vector<vector<State>> &grid) {
+  	open.push_back(vector<int> {x, y, g, h});
+  	grid[x][y] = State::kClosed;
 }
 
 void ExpandNeighbors(const vector<int> &current, int goal[2], vector<vector<int>> &openlist, vector<vector<State>> &grid) {
@@ -91,35 +119,6 @@ vector<vector<State>> Search(vector<vector<State>> grid, int start[2], int goal[
     }
     cout << "No path found!\n";
     return vector<vector<State>> {}; 
-}
-
-vector<State> ParseLine(string line) {
-    istringstream sline(line);
-    int n;
-    char c;
-   
-    vector<State> row;
-    while (sline >> n >> c && c == ',') {
-     
-      row.push_back(n == 0 ? State::kEmpty : State::kObstacle);
-    }
-    return row;
-}
-
-
-vector<vector<State>> ReadBoardFile(string path) {
-  ifstream myfile (path);
- 
-  vector<vector<State>> board{};
-  if (myfile) {
-    string line;
-    while (getline(myfile, line)) {
-      
-      vector<State> row = ParseLine(line);
-      board.push_back(row);
-    }
-  }
-  return board;
 }
 
 string CellString(State cell) {
