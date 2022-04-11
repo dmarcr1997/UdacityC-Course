@@ -16,13 +16,23 @@ void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &open, vector<vec
   	grid[x][y] = State::kClosed;
 }
 
-vector<vector<State>> Search(vector<vector<State>> grid, int start[2], int goal[2]) {
-    cout << "No path found!\n";
-    return vector<vector<State>> {}; 
-}
-
 int Heuristic(int x1, int x2, int y1, int y2){
     return abs(x2 - x1) + abs(y2 - y1);
+}
+
+bool Compare(vector<int> node1, vector<int> node2){
+  return (node1[2] + node1[3]) > (node2[2] + node2[3]) ? true : false;
+}
+
+vector<vector<State>> Search(vector<vector<State>> grid, int start[2], int goal[2]) {
+    vector<vector<int>> open {};
+    int x = start[0];
+    int y = start[1];
+    int g = 0;
+    int h = Heuristic(x, y, goal[0],goal[1]);
+    AddToOpen(x, y, g, h, open, grid);
+    cout << "No path found!\n";
+    return vector<vector<State>> {}; 
 }
 
 vector<State> ParseLine(string line) {
