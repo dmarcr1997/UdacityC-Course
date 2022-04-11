@@ -55,7 +55,7 @@ void CellSort(vector<vector<int>> *v) {
   sort(v->begin(), v->end(), Compare);
 }
 
-int Heuristic(int x1, int x2, int y1, int y2){
+int Heuristic(int x1, int y1, int x2, int y2){
     return abs(x2 - x1) + abs(y2 - y1);
 }
 
